@@ -1,0 +1,101 @@
+void setup() { 
+
+  // put your setup code here, to run once: 
+
+  Serial.begin(115200); //Begin serial communications with a baud rate of 115200 
+
+  //Tell the arduino if the pin is an INPUT or an OUTPUT 
+
+  //pinMode(2, INPUT); // set pin 2 as an INPUT 
+
+} 
+
+ 
+
+void loop() { 
+
+  // put your main code here, to run repeatedly: 
+
+  int sensor1 = analogRead(0); 
+
+  int sensor2 = analogRead(1); 
+
+  int sensor3 = analogRead(2); 
+
+  int sensor4 = analogRead(3); 
+
+  int sensor5 = analogRead(4); 
+
+  Serial.println(sensor5); 
+
+  if (sensor1 < 500){ 
+
+    pinMode(9, OUTPUT);  
+
+  } 
+
+  if (sensor1 >= 500){ 
+
+    pinMode(9, INPUT); 
+
+  } 
+
+  if (sensor2 < 500){ 
+
+    pinMode(10, OUTPUT);  
+
+  } 
+
+  if (sensor2 >= 500){ 
+
+    pinMode(10, INPUT); 
+
+  } 
+
+  if (sensor3 < 500){ 
+
+    pinMode(11, OUTPUT);  
+
+  } 
+
+  if (sensor3 >= 500){ 
+
+    pinMode(11, INPUT); 
+
+  } 
+
+  if (sensor2 < 500){ 
+
+    pinMode(10, OUTPUT);  
+
+  } 
+
+  if (sensor1 >= 500 && sensor2 >= 500 && sensor3 >= 500 && sensor4 >= 500 ){ 
+
+    pinMode(12, OUTPUT); 
+
+    pinMode(10, INPUT); 
+
+    pinMode(9, INPUT); 
+
+  } 
+
+  else{ 
+
+    pinMode(12,INPUT); 
+
+  } 
+
+  if (sensor5 >= 678){ //If going through Voltage Regulator, the number is 678. If not, the number is 970 
+
+    pinMode(8, INPUT);  
+
+  } 
+
+  else{ 
+
+    pinMode(8, OUTPUT); 
+
+  } 
+
+} 
