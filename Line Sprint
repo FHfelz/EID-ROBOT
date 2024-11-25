@@ -1,0 +1,66 @@
+#include <rcc.h>
+int sensor1 = 0;
+int sensor2 = 0;
+int sensor3 = 0;
+int sensor4 = 0;
+ 
+void setup() {
+  Serial.begin(9600);
+  pinMode(A2, INPUT);
+  pinMode(A3, INPUT);
+  pinMode(A4, INPUT);
+  pinMode(A5, INPUT);
+  motorSetup();
+}
+void loop() {
+  //Detect what the sensors are picking up in order to calibrate them
+  Serial.println(sensor4);
+  // Get state of iR sensors
+  update_sensors();
+
+  // Decision Block
+  if(sensor1 == sensor2 && sensor3 == sensor4 && sensor1 == sensor4)
+  {//Either all are on the line or none are on the line, so the motors should stop moving
+    turnBrakesOn();  }
+  else if(sensor2 == 1 && sensor3 == 1)
+  {//Move forward along the line
+    moveForward();}
+  else if(sensor1 == 1 && sensor2 == 0 && sensor3 == 0)
+  {//Only the far left sensor is on the line, so the motors should turn left
+    turnLeft();}
+  else if(sensor1 == 1 && sensor2 == 1 && sensor3 == 0)
+  {//Both middle two sensors aren't on the line, but the far left sensor is on the line, so the motors should turn left
+    turnLeft();}
+  else if(sensor4 == 1 && sensor3 == 0 && sensor2 == 0)
+  {//Only the far right sensor is on the line, so the motors should turn right
+    turnRight();}
+  else if(sensor4 == 1 && sensor3 == 1 && sensor2 == 0)
+  {//Both middle two sensors aren't on the line, but the far right sensor is on the line, so the motors should turn right
+    turnRight();}
+  else
+  {//If none of these are the case, the robot stop moving 
+    turnBrakesOn();}
+}
+void update_sensors()
+{
+  sensor1 = digitalRead(A5);
+  sensor2 = digitalRead(A4);
+  sensor3 = digitalRead(A3);
+  sensor4 = digitalRead(A2);
+}
+void moveForward()
+{//Both motors should be going at the same speed, but not at top speed
+rawMotorCtrl(125,125);
+}
+void turnLeft()
+{//The right motor should have a bit more power than the left motor
+  rawMotorCtrl(75, 100);
+}
+void turnRight()
+{//The left motor should have a bit more power than the right motor
+  rawMotorCtrl(100, 75);
+}
+void turnBrakesOn()
+{//Motors should stop moving completely
+  rawMotorCtrl(0, 0);
+}
