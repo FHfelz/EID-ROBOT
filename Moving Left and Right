@@ -1,0 +1,77 @@
+void setup() {
+  Serial.begin(115200);
+  pinMode(8,OUTPUT); 
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
+}
+int sensor1 = analogRead(0);
+int sensor2 = analogRead(1);
+int sensor3 = analogRead(2);
+int sensor4 = analogRead(3);
+int sensor5 = analogRead(4);
+ 
+void moveForward()
+{
+  rawMotorCtrl(125,125);
+}
+ 
+int turnBrakesOn()
+{  
+  rawMotorCtrl(0,0);
+}
+int softTurn(rotation){
+  if (rotation == "left") {
+        rawMotorCtrl(100,125);
+    } else if (rotation == "right") {
+        rawMotorCtrl(125,100);
+    } else {
+        moveForward;
+    }
+}
+int hardTurn(rotation){
+  if (rotation == "left") {
+        rawMotorCtrl(75,125);
+    } else if (rotation == right) {
+        rawMotorCtrl(125,75);
+    } else {
+        moveForward;
+    }
+}
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (sensor1 >= 800){
+    if (sensor2 >= 800){
+      while (sensor1 >= 800){
+        softTurn(left);
+      }
+    } else{
+      while (sensor1 >= 800){
+        hardTurn(left);
+      }
+    }
+  }else if (sensor4 >= 800){
+    if (sensor3 >= 800){
+      while (sensor1 >= 800){
+        softTurn(right);
+      }
+    } else{
+      while (sensor1 >= 800){
+        hardTurn(right);
+      }
+    }
+  }
+  else{
+    moveforward;}
+  if (sensor1 >= 800 && sensor2 >= 800 && sensor3 >= 800 && sensor4 >= 800 ){
+    turnBrakesOn;
+  }
+  if (sensor5 >= 1000){ //If going through Voltage Regulator, the number is 678. If not, the number is 970
+    moveForward; 
+  }
+  else{
+    turnBrakesOn;
+  }
+}
