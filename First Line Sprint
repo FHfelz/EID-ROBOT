@@ -1,0 +1,69 @@
+#include <rcc.h>
+int sensor1 = 0;
+int sensor2 = 0;
+int sensor3 = 0;
+int sensor4 = 0;
+int sensor5 = 0;
+ 
+void setup() {
+  Serial.begin(9600);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
+  pinMode(A4, INPUT);
+  pinMode(A5, INPUT);
+  pinMode(A0, INPUT);
+  pinMode(9, INPUT);
+  motorSetup();
+}
+void update_sensors()
+{
+  sensor1 = digitalRead(A5);
+  sensor2 = digitalRead(A4);
+  sensor3 = digitalRead(A2);
+  sensor4 = digitalRead(A1);
+  sensor5 = digitalRead(A0);
+}
+ 
+void loop() {
+ 
+  // Get state of iR sensors
+  update_sensors();
+  //Detect what the sensors are picking up in order to calibrate them
+  Serial.print(" /Sensor2:");
+  Serial.print(sensor2);
+  Serial.print(" /Sensor3:");
+  Serial.print(sensor3);
+  Serial.print(" /Sensor5:");
+  Serial.print(sensor5);
+  Serial.println();  
+  // Decision Block
+  if(sensor2 == sensor5 && sensor3 == sensor5 && sensor1 == sensor5 && sensor4 == sensor5 && sensor5 == 1)
+  {//The robot is in the box, so the motors should stop moving
+      rawMotorCtrl(0,0);
+      delay(1000); //There is a delay so that when the robot stops, if it is at the intersection, the momentum will push past it
+      update_sensors(); //Recheck the conditions to double check if the robot is in the box or not
+      if(sensor1 == 1 && sensor4 == 1 && sensor5 == 1 && sensor2 == 1 && sensor3 == 1){
+        while(true){
+         pinMode(9, HIGH);
+         rawMotorCtrl(0,0); 
+        }
+      }   
+  }
+  else if(sensor4 == 1){
+    rawMotorCtrl(0,90);    
+  }
+  else if(sensor2 == 1){
+        rawMotorCtrl(80,70);
+      }
+  else if(sensor3 == 1){
+        rawMotorCtrl(70,80);
+      }
+ 
+  else if(sensor1 == sensor5 && sensor3 == sensor2 && sensor5 == 0){
+    //If the robot is on the white
+      rawMotorCtrl(-70, 70);
+  }
+  else if(sensor1 == 1){
+    rawMotorCtrl(90,0);
+  }
+}
