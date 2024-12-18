@@ -37,7 +37,7 @@ void loop()
 //Do this loop 3 times
     for (int i = 0; i < 3; i++) {
       while(rcount < 1350){ 
-        //Once the left wheel counts 6300, it should stop, causing it to stop around the 1m mark
+        //Once the right wheel counts to 1350, it should stop
         lcount = lodom.getCount();
         rcount = rodom.getCount();
         turnCCW();
@@ -53,7 +53,7 @@ void loop()
       pinMode(9, LOW);
       //Resets the left wheel count
       while(rcount > 200){ 
-        //Once the left wheel counts -700, it is negative because it is going backwards, it should stop
+        //Once the right wheel counts back down to 200, it should stop
         lcount = lodom.getCount();
         rcount = rodom.getCount();
         turnCW();
