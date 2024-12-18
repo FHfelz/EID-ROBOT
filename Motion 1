@@ -1,129 +1,72 @@
 #include <rcc.h>
  
 Right_Dir_Odom rodom;
-
 Left_Dir_Odom lodom;
  
 void setup()
-
 {
-
   Serial.begin(9600);
-
   motorSetup();
- 
+  pinMode(9, INPUT);
 }
-
 void moveForward()
-
 {
-
   rawMotorCtrl(123,107);
-
 }
-
 void turnBrakesOn()
-
 {
-
   rawMotorCtrl(0, 0);
-
 }
-
 void moveBackward()
-
 {
-
   rawMotorCtrl(-123,-110);
-
 }
-
 void loop()
-
 {
-
 //The ticks it measured as the left wheel is rotating
-
     int lcount = lodom.getCount(); 
-
 //The ticks it measured as the right wheel is rotating    
-
     int rcount = rodom.getCount();
-
 //Print both the ticks for the left wheel and right wheel
-
     Serial.print("lcount: ");
-
     Serial.print(lcount);
-
     Serial.print(" | rcount: ");
-
     Serial.print(rcount);
-
     Serial.println();
-
 //Do this loop 3 times
-
     for (int i = 0; i < 3; i++) {
-
       while(rcount < 7550){ 
-
-        //Once the left wheel counts 6300, it should stop, causing it to stop around the 1m mark
-
+        //Once the right wheel counts 7550, it should stop, causing it to stop around the 1m mark
         lcount = lodom.getCount();
-
         rcount = rodom.getCount();
-
         moveForward();
-
         Serial.print("lcount: ");
-
         Serial.print(lcount);
-
         Serial.print(" | rcount: ");
-
         Serial.print(rcount);
-
         Serial.println();
-
       }
-
       turnBrakesOn();
-
+      pinMode(9, HIGH);
       delay(2000);
-
+      pinMode(9, LOW);      
       //Resets the left wheel count
-
       while(rcount > 500){ 
-
-        //Once the left wheel counts -6300, it is negative because it is going backwards, it should stop
-
+        //Once the right wheel counts back down to 500, it should stop
         lcount = lodom.getCount();
-
         rcount = rodom.getCount();
-
         moveBackward();
-
         Serial.print("lcount: ");
-
         Serial.print(lcount);
-
         Serial.print(" | rcount: ");
-
         Serial.print(rcount);
-
         Serial.println();
-
       }
-
       turnBrakesOn();
-
+      pinMode(9, HIGH);
       delay(2000);
-
-}
-
+      pinMode(9, LOW);}
 while(true){turnBrakesOn();} 
-
 }
 
  
